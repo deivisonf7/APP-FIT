@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Fit Tracker Pro</title>
+    <style>
+        :root {
+            --bg-main: #000000;
+            --bg-card: #121214;
+            --bg-input: #1a1a1e;
+            --color-primary: #0a84ff;
+            --color-success: #30d158;
+            --text-main: #ffffff;
+            --text-dark: #8e8e93;
+            --border-line: #222224;
+            --accent-dim: rgba(10, 132, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding-bottom: 90px;
+        }
+
+        .app-header {
+            background-color: rgba(18, 18, 20, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .main-container {
+            padding: 16px;
+        }
+
+        .app-page {
+            display: none;
+        }
+
+        .app-page.active {
+            display: block;
+        }
+
+        /* Abas Superiores */
+        .days-navigation {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-tab-button {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            color: var(--text-dark);
+            padding: 12px 0;
+            font-size: 13px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-tab-button.active {
+            background-color: var(--color-primary);
+            color: var(--text-main);
+            border-color: var(--color-primary);
+        }
+
+        .workout-content-block {
+            display: none;
+        }
+
+        .workout-content-block.active {
+            display: block;
+        }
+
+        .focus-badge-title {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        /* Cartões de Exercício */
+        .exercise-item-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .exercise-main-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .custom-checkbox-input {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--color-success);
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .exercise-details {
+            flex: 1;
+        }
+
+        .exercise-name-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .exercise-meta-info {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .muscle-tag {
+            font-size: 11px;
+            background-color: var(--accent-dim);
+            color: #64b5f6;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .weight-fields-grid {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-line);
+        }
+
+        .weight-text-field {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-line);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 8px 12px;
+            width: 50%;
+            font-size: 13px;
+        }
+
+        .video-guide-button {
+            margin-top: 12px;
+            background-color: rgba(255, 255, 255, 0.02);
+            color: var(--color-primary);
+            border: 1px solid var(--border-line);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Estilos do Dicionário */
+        .dict-section {
+            margin-bottom: 24px;
+        }
+        .dict-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-line);
+            padding-bottom: 6px;
+        }
+        .dict-sub-group {
+            margin-bottom: 14px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .dict-sub-title {
+            font-size: 14px;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .dict-list {
+            list-style: none;
+            padding-left: 4px;
+        }
+        .dict-list li {
+            font-size: 15px;
+            padding: 6px 0;
+            border-bottom: 0.5px solid rgba(255,255,255,0.03);
+            color: #f5f5f7;
+        }
+        .dict-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Menu de Navegação Inferior */
+        .bottom-navigation-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background-color: rgba(18, 18, 20, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-line);
+            display: flex;
+            z-index: 1000;
+        }
+
+        .nav-tab-item {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .nav-tab-item.active {
+            color: var(--color-primary);
+        }
+
+        .nav-tab-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1 id="dynamic-app-title">Meus Treinos</h1>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- PÁGINA PRINCIPAL: LISTA DE TREINOS -->
+        <div id="page-content-workouts" class="app-page active">
+            
+            <div class="days-navigation">
+                <button class="day-tab-button active" data-day="1">DIA 1</button>
+                <button class="day-tab-button" data-day="2">DIA 2</button>
+                <button class="day-tab-button" data-day="3">DIA 3</button>
+                <button class="day-tab-button" data-day="4">DIA 4</button>
+            </div>
+
+            <!-- CONTEÚDO: DIA 1 -->
+            <div id="workout-block-day-1" class="workout-content-block active">
+                <h2 class="focus-badge-title">Foco: Braços (Bícep e Trícep)</h2>
+                
+                <!-- Ex 1 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">1. Rosca Direta com Barra Reta</h3>
+                            <p class="exercise-meta-info">Cabeça Longa - Foco em Pico</p>
+                            <span class="muscle-tag">Bícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e1" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+direta+barra+reta" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 2 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e2"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">2. Rosca Scott com Barra W</h3>
+                            <p class="exercise-meta-info">Cabeça Curta - Foco em Largura Interna</p>
+                            <span class="muscle-tag">Bícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e2" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e2" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+scott+barra+w" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 3 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e3"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">3. Rosca Martelo com Halteres</h3>
+                            <p class="exercise-meta-info">Músculo Braquial e Braquiorradial (Espessura Lateral)</p>
+                            <span class="muscle-tag">Braquial</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e3" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e3" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+martelo+com+halteres" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 4 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e4"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">4. Rosca Concentrada com Halter</h3>
+                            <p class="exercise-meta-info">Isolamento e Pico/Cabeça Curta</p>
+                            <span class="muscle-tag">Bícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e4" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e4" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+concentrada+com+halter" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 5 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e5"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">5. Tríceps Testa com Barra W</h3>
+                            <p class="exercise-meta-info">Cabeça Longa - Maior Volume Traseiro</p>
+                            <span class="muscle-tag">Trícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e5" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e5" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+triceps+testa+barra+w" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 6 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e6"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">6. Tríceps Pulley com Barra Reta</h3>
+                            <p class="exercise-meta-info">Cabeças Lateral e Medial - Definição Externa</p>
+                            <span class="muscle-tag">Trícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e6" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e6" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+triceps+pulley+barra+reta" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 7 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e7"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">7. Tríceps Francês na Polia com Corda</h3>
+                            <p class="exercise-meta-info">Cabeça Longa sob Alongamento Máximo</p>
+                            <span class="muscle-tag">Trícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e7" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e7" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+triceps+frances+na+polia+com+corda" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 8 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e8"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">8. Tríceps Corda na Polia Alta</h3>
+                            <p class="exercise-meta-info">Ênfase na Cabeça Lateral e Contração Máxima</p>
+                            <span class="muscle-tag">Trícep</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e8" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e8" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+triceps+corda+na+polia+alta" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO: DIA 2 -->
+            <div id="workout-block-day-2" class="workout-content-block">
+                <h2 class="focus-badge-title">Foco: Costas (Densidade e Largura)</h2>
+                
+                <!-- Ex 1 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">1. Puxada Frontal Aberta na Polia Alta</h3>
+                            <p class="exercise-meta-info">Latíssimo do Dorso (Largura e Expansão)</p>
+                            <span class="muscle-tag">Costas</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e1" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+puxada+frontal+aberta+na+polia+alta" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 2 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e2"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">2. Remada Curvada com Barra (Pronada)</h3>
+                            <p class="exercise-meta-info">Miolo das Costas (Romboides/Trapézio Médio - Espessura)</p>
+                            <span class="muscle-tag">Costas</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e2" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e2" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+remada+curvada+com+barra+pronada" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 3 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e3"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">3. Pulldown na Polia Alta com Corda</h3>
+                            <p class="exercise-meta-info">Latíssimo do Dorso (Isolamento completo sem uso do bícep)</p>
+                            <span class="muscle-tag">Costas</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e3" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e3" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+pulldown+na+polia+alta+com+corda" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 4 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e4"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">4. Remada Unilateral com Halter (Serrote)</h3>
+                            <p class="exercise-meta-info">Grande Dorsal Inferior e Miolo (Unilateral/Assimetrias)</p>
+                            <span class="muscle-tag">Costas</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e4" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e4" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+remada+unilateral+com+halter+serrote" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 5 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e5"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">5. Encolhimento de Ombros com Halteres</h3>
+                            <p class="exercise-meta-info">Trapézio Superior (Volume da Linha de Pescoço)</p>
+                            <span class="muscle-tag">Trapézio</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e5" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e5" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+encolhimento+de+ombros+com+halteres" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 6 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e6"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">6. Extensão Lombar no Banco Romano</h3>
+                            <p class="exercise-meta-info">Lombar / Eretores da Espinha (Cadeia Posterior/Estabilidade)</p>
+                            <span class="muscle-tag">Lombar</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e6" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e6" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+extensao+lombar+no+banco+romano" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO: DIA 3 -->
+            <div id="workout-block-day-3" class="workout-content-block">
+                <h2 class="focus-badge-title">Foco: Peito e Ombro (Empurrar e Estética)</h2>
+                
+                <!-- Ex 1 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">1. Supino Inclinado com Halteres</h3>
+                            <p class="exercise-meta-info">Peitoral Maior (Porção Clavicular - Peito Superior)</p>
+                            <span class="muscle-tag">Peito</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e1" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+supino+inclinado+com+halteres" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 2 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e2"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">2. Supino Reto com Barra</h3>
+                            <p class="exercise-meta-info">Peitoral Maior (Porção Esternocostal - Peito Médio/Geral)</p>
+                            <span class="muscle-tag">Peito</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e2" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e2" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+supino+reto+com+barra" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 3 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e3"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">3. Crossover na Polia Alta</h3>
+                            <p class="exercise-meta-info">Peitoral Maior (Porção Costal - Peito Inferior)</p>
+                            <span class="muscle-tag">Peito</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e3" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e3" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+crossover+na+polia+alta" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 4 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e4"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">4. Peck Deck / Voador</h3>
+                            <p class="exercise-meta-info">Peitoral Maior (Foco Médio - Isolamento e Linha Central)</p>
+                            <span class="muscle-tag">Peito</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e4" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e4" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+peck+deck+voador" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 5 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e5"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">5. Desenvolvimento com Halteres</h3>
+                            <p class="exercise-meta-info">Deltoide Anterior (Frontal do Ombro)</p>
+                            <span class="muscle-tag">Ombro</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e5" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e5" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+desenvolvimento+com+halteres" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 6 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e6"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">6. Elevação Lateral na Polia Baixa</h3>
+                            <p class="exercise-meta-info">Deltoide Lateral (Largura e Linha Lateral do Ombro)</p>
+                            <span class="muscle-tag">Ombro</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e6" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e6" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+elevacao+lateral+na+polia+baixa" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 7 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e7"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">7. Crucifixo Inverso na Máquina</h3>
+                            <p class="exercise-meta-info">Deltoide Posterior (Traseiro do Ombro/Equilíbrio Postural)</p>
+                            <span class="muscle-tag">Ombro</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e7" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e7" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+crucifixo+inverso+na+maquina" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 8 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e8"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">8. Elevação Frontal com Barra</h3>
+                            <p class="exercise-meta-info">Deltoide Anterior (Lapidação e Volume Frontal)</p>
+                            <span class="muscle-tag">Ombro</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d3-e8" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d3-e8" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+elevacao+frontal+com+barra" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO: DIA 4 -->
+            <div id="workout-block-day-4" class="workout-content-block">
+                <h2 class="focus-badge-title">Foco: Pernas Completo (Membros Inferiores)</h2>
+                
+                <!-- Ex 1 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">1. Agachamento Livre com Barra</h3>
+                            <p class="exercise-meta-info">Quadríceps e Glúteos (Base de Volume e Força Geral)</p>
+                            <span class="muscle-tag">Pernas</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e1" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+agachamento+livre+com+barra" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 2 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e2"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">2. Stiff com Halteres</h3>
+                            <p class="exercise-meta-info">Posteriores de Coxa / Isquiotibiais (Alongamento Exacerbado)</p>
+                            <span class="muscle-tag">Posterior</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e2" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e2" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+stiff+com+halteres" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 3 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e3"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">3. Elevação Pélvica com Barra</h3>
+                            <p class="exercise-meta-info">Glúteo Máximo (Contração Pico de Carga Máxima)</p>
+                            <span class="muscle-tag">Glúteo</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e3" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e3" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+elevacao+pelvica+com+barra" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 4 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e4"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">4. Cadeira Extensora</h3>
+                            <p class="exercise-meta-info">Quadríceps (Isolamento Anatómico da Coxa Anterior)</p>
+                            <span class="muscle-tag">Quadríceps</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e4" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e4" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+cadeira+extensora" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 5 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e5"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">5. Cadeira Flexora ou Mesa Flexora</h3>
+                            <p class="exercise-meta-info">Posteriores de Coxa (Isolamento em Flexão de Joelho)</p>
+                            <span class="muscle-tag">Posterior</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e5" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e5" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+cadeira+flexora+ou+mesa+flexora" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 6 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e6"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">6. Cadeira Adutora</h3>
+                            <p class="exercise-meta-info">Músculos Adutores (Preenchimento da Região Interna)</p>
+                            <span class="muscle-tag">Adutores</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e6" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e6" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+cadeira+adutora" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 7 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e7"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">7. Gêmeos em Pé na Máquina</h3>
+                            <p class="exercise-meta-info">Panturrilhas (Músculo Gastrocnêmio - Volume em Pé)</p>
+                            <span class="muscle-tag">Panturrilha</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e7" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e7" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+gemeos+em+pe+na+maquina" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+
+                <!-- Ex 8 -->
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d4-e8"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">8. Gêmeos Sentado na Máquina</h3>
+                            <p class="exercise-meta-info">Panturrilhas (Músculo Sólio - Espessura Inferior)</p>
+                            <span class="muscle-tag">Panturrilha</span>
+                        </div>
+                    </div>
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d4-e8" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d4-e8" placeholder="Anotações">
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+gemeos+sentado+na+maquina" target="_blank" class="video-guide-button">Ver Execução</a>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- PÁGINA: CARDIO -->
+        <div id="page-content-cardio" class="app-page">
+            <h2 class="focus-badge-title">Exercícios Aeróbicos</h2>
+            
+            <div class="exercise-item-card">
+                <div class="exercise-main-row">
+                    <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-cardio"></div>
+                    <div class="exercise-details">
+                        <h3 class="exercise-name-title">Esteira Pós-Treino</h3>
+                        <p class="exercise-meta-info">30 Minutos em Ritmo Moderado</p>
+                        <span class="muscle-tag" style="background-color: rgba(255, 69, 58, 0.12); color: #ff453a;">Aeróbico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PÁGINA: DICIONÁRIO -->
+        <div id="page-content-dictionary" class="app-page">
+            <h2 class="focus-badge-title" style="margin-bottom: 20px;">Enciclopédia Completa de Exercícios</h2>
+            
+            <!-- 1. Peitoral -->
+            <div class="dict-section">
+                <div class="dict-section-title">1. Peitoral (Peito)</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Porção Clavicular (Superior)</div>
+                    <ul class="dict-list">
+                        <li>• Supino inclinado com barra</li>
+                        <li>• Supino inclinado com halteres</li>
+                        <li>• Supino inclinado articulado (máquina)</li>
+                        <li>• Crucifixo inclinado com halteres</li>
+                        <li>• Crucifixo inclinado na polia (cabos de baixo para cima)</li>
+                        <li>• Flexão de braço inclinada (pés elevados no banco)</li>
+                        <li>• Supino inclinado com pegada invertida</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Porção Esternocostal (Médio e Geral)</div>
+                    <ul class="dict-list">
+                        <li>• Supino reto com barra</li>
+                        <li>• Supino reto com halteres</li>
+                        <li>• Supino reto articulado (máquina vertical/convergente)</li>
+                        <li>• Crucifixo reto com halteres</li>
+                        <li>• Peck Deck / Voador</li>
+                        <li>• Crossover na polia média</li>
+                        <li>• Flexão de braço tradicional no chão</li>
+                        <li>• Flexão de braço com carga (anilha nas costas)</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Porção Costal (Inferior)</div>
+                    <ul class="dict-list">
+                        <li>• Supino declinado com barra</li>
+                        <li>• Supino declinado com halteres</li>
+                        <li>• Supino declinado articulado</li>
+                        <li>• Crucifixo declinado com halteres</li>
+                        <li>• Crossover na polia alta (cabos de cima para baixo)</li>
+                        <li>• Paralelas nas barras paralelas (tronco inclinado)</li>
+                        <li>• Flexão de braço declinada (mãos no banco)</li>
+                        <li>• Supino Guilford (na polia baixa)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. Costas -->
+            <div class="dict-section">
+                <div class="dict-section-title">2. Costas (Dorsais)</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Latíssimo do Dorso / Grande Dorsal (Largura)</div>
+                    <ul class="dict-list">
+                        <li>• Puxada frontal na polia alta (pegada pronada aberta)</li>
+                        <li>• Puxada com pegada supinada (fechada ou média)</li>
+                        <li>• Puxada com pegada neutra (triângulo)</li>
+                        <li>• Puxada articulada unilateral</li>
+                        <li>• Barra fixa tradicional (pegada pronada aberta)</li>
+                        <li>• Barra fixa com pegada supinada (Chin-up)</li>
+                        <li>• Barra fixa com pegada neutra</li>
+                        <li>• Pulldown na polia alta com barra reta</li>
+                        <li>• Pulldown na polia alta com corda</li>
+                        <li>• Pullover com halter (em banco reto)</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Miolo das Costas / Romboides e Trapézio Médio/Inferior (Espessura)</div>
+                    <ul class="dict-list">
+                        <li>• Remada curvada com barra (pronada ou supinada)</li>
+                        <li>• Remada curvada com halteres</li>
+                        <li>• Remada baixa na polia com triângulo</li>
+                        <li>• Remada baixa na polia com barra reta (pegada aberta)</li>
+                        <li>• Remada cavalinho (barra em T)</li>
+                        <li>• Remada articulada na máquina</li>
+                        <li>• Remada no banco inclinado com halteres (Seal row)</li>
+                        <li>• Remada unilateral com halter (Serrote)</li>
+                        <li>• Crucifixo inverso na polia alta</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Trapézio Superior</div>
+                    <ul class="dict-list">
+                        <li>• Encolhimento de ombros com barra pela frente</li>
+                        <li>• Encolhimento de ombros com barra por trás</li>
+                        <li>• Encolhimento de ombros com halteres</li>
+                        <li>• Encolhimento de ombros no Smith</li>
+                        <li>• Remada alta com barra</li>
+                        <li>• Remada alta na polia com corda</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Lombar / Eretores da Espinha</div>
+                    <ul class="dict-list">
+                        <li>• Levantamento terra tradicional</li>
+                        <li>• Levantamento terra sumô</li>
+                        <li>• Extensão lombar no banco romano</li>
+                        <li>• Good Morning (bom dia) com barra</li>
+                        <li>• Extensão lombar no chão (superman)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3. Ombros -->
+            <div class="dict-section">
+                <div class="dict-section-title">3. Ombros (Deltoides)</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Deltoide Anterior (Frontal)</div>
+                    <ul class="dict-list">
+                        <li>• Desenvolvimento com halteres</li>
+                        <li>• Desenvolvimento com barra (Overhead Press)</li>
+                        <li>• Desenvolvimento no Smith</li>
+                        <li>• Desenvolvimento Arnold (Arnold Press)</li>
+                        <li>• Elevação frontal com halteres</li>
+                        <li>• Elevação frontal com barra</li>
+                        <li>• Elevação frontal na polia baixa</li>
+                        <li>• Elevação frontal com anilha</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Deltoide Lateral (Largura)</div>
+                    <ul class="dict-list">
+                        <li>• Elevação lateral com halteres</li>
+                        <li>• Elevação lateral na polia baixa</li>
+                        <li>• Elevação lateral unilateral inclinado no banco</li>
+                        <li>• Elevação lateral na máquina articulada</li>
+                        <li>• Elevação lateral inclinada (cabos cruzados)</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Deltoide Posterior (Traseiro)</div>
+                    <ul class="dict-list">
+                        <li>• Crucifixo inverso com halteres</li>
+                        <li>• Crucifixo inverso no banco inclinado</li>
+                        <li>• Crucifixo inverso na máquina (Peck deck invertido)</li>
+                        <li>• Crucifixo inverso na polia alta</li>
+                        <li>• Face pull na polia alta com corda</li>
+                        <li>• Remada alta com pegada bem aberta</li>
+                        <li>• Remada curvada com halteres com cotovelos para fora</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. Braços -->
+            <div class="dict-section">
+                <div class="dict-section-title">4. Braços (Bícep, Tríceps e Antebraço)</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Bícep - Cabeça Longa (Pico Externo)</div>
+                    <ul class="dict-list">
+                        <li>• Rosca direta com barra reta</li>
+                        <li>• Rosca direta com halteres no banco inclinado</li>
+                        <li>• Rosca direta no Smith (Drag curl)</li>
+                        <li>• Rosca direta na polia baixa com barra reta</li>
+                        <li>• Rosca direta com halteres alternada com rotação</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Bícep - Cabeça Curta (Largura Interna)</div>
+                    <ul class="dict-list">
+                        <li>• Rosca Scott com barra W ou reta</li>
+                        <li>• Rosca Scott unilateral com halter</li>
+                        <li>• Rosca Scott na máquina articulada</li>
+                        <li>• Rosca concentrada com halter</li>
+                        <li>• Rosca teia (Spider curl)</li>
+                        <li>• Rosca bípede na polia alta</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Braquial e Braquiorradial (Transição e Espessura)</div>
+                    <ul class="dict-list">
+                        <li>• Rosca martelo com halteres</li>
+                        <li>• Rosca martelo na polia baixa com corda</li>
+                        <li>• Rosca martelo Scott</li>
+                        <li>• Rosca inversa com barra</li>
+                        <li>• Rosca inversa na polia</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Tríceps - Cabeça Longa (Volume Posterior)</div>
+                    <ul class="dict-list">
+                        <li>• Tríceps testa com barra W ou reta</li>
+                        <li>• Tríceps testa com halteres</li>
+                        <li>• Tríceps francês unilateral com halter</li>
+                        <li>• Tríceps francês bilateral com halter pesado</li>
+                        <li>• Tríceps francês na polia baixa com corda</li>
+                        <li>• Tríceps francês na polia alta (deitado)</li>
+                        <li>• Extensão de tríceps sobre a cabeça na máquina</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Tríceps - Cabeças Lateral e Medial</div>
+                    <ul class="dict-list">
+                        <li>• Tríceps pulley com barra reta</li>
+                        <li>• Tríceps pulley com barra V</li>
+                        <li>• Tríceps pulley unilateral</li>
+                        <li>• Tríceps corda na polia alta</li>
+                        <li>• Tríceps coice com halter</li>
+                        <li>• Tríceps coice na polia baixa</li>
+                        <li>• Supino com pegada fechada</li>
+                        <li>• Mergulho nas paralelas</li>
+                        <li>• Mergulho no banco</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Antebraço (Flexores e Extensores)</div>
+                    <ul class="dict-list">
+                        <li>• Flexão de punho com barra</li>
+                        <li>• Flexão de punho com halteres</li>
+                        <li>• Extensão de punho com barra</li>
+                        <li>• Extensão de punho com halteres</li>
+                        <li>• Flexão de punho por trás das costas com barra</li>
+                        <li>• Rolo de punho (Wrist roller)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 5. Pernas -->
+            <div class="dict-section">
+                <div class="dict-section-title">5. Pernas (Membros Inferiores)</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Quadríceps (Frente da Coxa)</div>
+                    <ul class="dict-list">
+                        <li>• Agachamento livre com barra</li>
+                        <li>• Agachamento frontal com barra</li>
+                        <li>• Agachamento no Hack</li>
+                        <li>• Agachamento no Smith</li>
+                        <li>• Leg Press 45°</li>
+                        <li>• Leg Press Horizontal</li>
+                        <li>• Cadeira Extensora</li>
+                        <li>• Agachamento Sissy</li>
+                        <li>• Agachamento búlgaro (tronco ereto)</li>
+                        <li>• Passada / Avanço caminhando</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Posteriores de Coxa / Isquiotibiais</div>
+                    <ul class="dict-list">
+                        <li>• Stiff / Levantamento terra romeno</li>
+                        <li>• Stiff com halteres</li>
+                        <li>• Mesa flexora</li>
+                        <li>• Cadeira flexora</li>
+                        <li>• Flexora vertical</li>
+                        <li>• Bom dia (Good Morning) para posterior</li>
+                        <li>• Levantamento terra com pernas estendidas</li>
+                        <li>• Flexão de pernas na bola suíça/TRX</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Glúteos</div>
+                    <ul class="dict-list">
+                        <li>• Elevação pélvica com barra</li>
+                        <li>• Elevação pélvica na máquina</li>
+                        <li>• Agachamento búlgaro (tronco inclinado)</li>
+                        <li>• Passada (passos longos)</li>
+                        <li>• Recuo no Smith ou halteres</li>
+                        <li>• Glúteo na polia baixa</li>
+                        <li>• Glúteo quatro apoios</li>
+                        <li>• Cadeira abdutora</li>
+                        <li>• Abdução de quadril na polia</li>
+                        <li>• Clam shell com miniband</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Adutores (Parte Interna)</div>
+                    <ul class="dict-list">
+                        <li>• Cadeira adutora</li>
+                        <li>• Agachamento Sumô com halter</li>
+                        <li>• Adução de quadril na polia</li>
+                        <li>• Agachamento lateral</li>
+                    </ul>
+                </div>
+
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Panturrilhas</div>
+                    <ul class="dict-list">
+                        <li>• Gêmeos em pé na máquina</li>
+                        <li>• Gêmeos em pé no Smith</li>
+                        <li>• Gêmeos em pé unilateral</li>
+                        <li>• Gêmeos no Leg Press</li>
+                        <li>• Gêmeos sentado na máquina (Cavalo)</li>
+                        <li>• Gêmeos sentado com halteres</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 6. Core e Abdômen -->
+            <div class="dict-section">
+                <div class="dict-section-title">6. Core e Abdômen</div>
+                
+                <div class="dict-sub-group">
+                    <div class="dict-sub-title">Variações Gerais</div>
+                    <ul class="dict-list">
+                        <li>• Abdominal supra tradicional</li>
+                        <li>• Abdominal supra no banco declinado</li>
+                        <li>• Abdominal supra na polia alta</li>
+                        <li>• Elevação de pernas suspenso (Infra)</li>
+                        <li>• Elevação de pernas nas paralelas</li>
+                        <li>• Rotação de tronco na polia (Woodchopper)</li>
+                        <li>• Prancha frontal estática</li>
+                        <li>• Prancha lateral estática</li>
+                        <li>• Pressão de Pallof</li>
+                        <li>• Caminhada do fazendeiro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Barra de Navegação Inferior -->
+    <nav class="bottom-navigation-bar">
+        <button class="nav-tab-item active" data-view="page-content-workouts" data-header="Meus Treinos">
+            <span class="nav-tab-icon">🏋️‍♂️</span>
+            <span>Treinos</span>
+        </button>
+        <button class="nav-tab-item" data-view="page-content-cardio" data-header="Exercícios de Cardio">
+            <span class="nav-tab-icon">🏃‍♂️</span>
+            <span>Cardio</span>
+        </button>
+        <button class="nav-tab-item" data-view="page-content-dictionary" data-header="Dicionário Anatómico">
+            <span class="nav-tab-icon">📖</span>
+            <span>Dicionário</span>
+        </button>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Controle das Abas de Dias (Treinos)
+            var dayButtons = document.querySelectorAll('.day-tab-button');
+            var workoutBlocks = document.querySelectorAll('.workout-content-block');
+
+            dayButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    dayButtons.forEach(function(btn) { btn.classList.remove('active'); });
+                    workoutBlocks.forEach(function(block) { block.classList.remove('active'); });
+
+                    button.classList.add('active');
+                    var selectedDay = button.getAttribute('data-day');
+                    var realTarget = document.getElementById('workout-block-day-' + selectedDay);
+                    if (realTarget) {
+                        realTarget.classList.add('active');
+                    }
+                });
+            });
+
+            // Controle de Páginas do Menu Inferior
+            var navItems = document.querySelectorAll('.nav-tab-item');
+            var appPages = document.querySelectorAll('.app-page');
+            var topHeaderTitle = document.getElementById('dynamic-app-title');
+
+            navItems.forEach(function(navItem) {
+                navItem.addEventListener('click', function() {
+                    navItems.forEach(function(item) { item.classList.remove('active'); });
+                    appPages.forEach(function(page) { page.classList.remove('active'); });
+
+                    navItem.classList.add('active');
+                    var targetViewId = navItem.getAttribute('data-view');
+                    var targetPage = document.getElementById(targetViewId);
+                    if (targetPage) {
+                        targetPage.classList.add('active');
+                    }
+
+                    if (topHeaderTitle) {
+                        topHeaderTitle.innerText = navItem.getAttribute('data-header');
+                    }
+                });
+            });
+
+            // Sistema de Salvamento Local Persistente (Cargas e Checks)
+            var allCheckboxes = document.querySelectorAll('.custom-checkbox-input');
+            var allInputs = document.querySelectorAll('.weight-text-field');
+
+            allCheckboxes.forEach(function(checkbox) {
+                var storageKey = checkbox.getAttribute('data-storage-id');
+                checkbox.checked = localStorage.getItem(storageKey) === 'true';
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(storageKey, checkbox.checked);
+                });
+            });
+
+            allInputs.forEach(function(input) {
+                var storageKey = input.getAttribute('data-storage-id');
+                input.value = localStorage.getItem(storageKey) || '';
+                
+                input.addEventListener('input', function() {
+                    localStorage.setItem(storageKey, input.value);
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
