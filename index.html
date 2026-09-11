@@ -231,47 +231,23 @@
         <!-- PÁGINA 1: CRONOGRAMA DE TREINOS -->
         <div id="page-treinos" class="page active">
             <div class="days-tabs">
-                <button class="day-btn active" onclick="switchDay(1)">DIA 1</button>
-                <button class="day-btn" onclick="switchDay(2)">DIA 2</button>
-                <button class="day-btn" onclick="switchDay(3)">DIA 3</button>
-                <button class="day-btn" onclick="switchDay(4)">DIA 4</button>
+                <button class="day-btn active" onclick="switchDay(1, this)">DIA 1</button>
+                <button class="day-btn" onclick="switchDay(2, this)">DIA 2</button>
+                <button class="day-btn" onclick="switchDay(3, this)">DIA 3</button>
+                <button class="day-btn" onclick="switchDay(4, this)">DIA 4</button>
             </div>
 
             <!-- DIA 1: BRAÇOS -->
             <div id="workout-day-1" class="workout-section active">
-                <h2 class="section-subtitle">Foco: Braços (Bíceps e Tríceps)</h2>
+                <h2 class="section-subtitle">Foco: Braços (Bícep e Tríceps Separados)</h2>
                 
                 <div class="exercise-card">
                     <div class="exercise-header">
-                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-1"></div>
+                        <div class="checkbox-container"><input type="checkbox" id="ex1"></div>
                         <div class="exercise-info">
                             <h3 class="exercise-title">1. Rosca Direta com Barra Reta</h3>
                             <p class="exercise-desc">Cabeça Longa - Foco em Pico</p>
-                            <span class="exercise-target">Bíceps</span>
-                        </div>
-                    </div>
-                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+direta+barra+reta" target="_blank" class="btn-view">Visualizar Execução</a>
-                </div>
-
-                <div class="exercise-card">
-                    <div class="exercise-header">
-                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-2"></div>
-                        <div class="exercise-info">
-                            <h3 class="exercise-title">2. Rosca Scott com Barra W</h3>
-                            <p class="exercise-desc">Cabeça Curta - Foco em Largura Interna</p>
-                            <span class="exercise-target">Bíceps</span>
-                        </div>
-                    </div>
-                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+scott+barra+w" target="_blank" class="btn-view">Visualizar Execução</a>
-                </div>
-
-                <div class="exercise-card">
-                    <div class="exercise-header">
-                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-3"></div>
-                        <div class="exercise-info">
-                            <h3 class="exercise-title">3. Tríceps Testa com Barra W</h3>
-                            <p class="exercise-desc">Cabeça Longa do Tríceps</p>
-                            <span class="exercise-target">Tríceps</span>
+                            <span class="exercise-target">Bícep</span>
                         </div>
                     </div>
                     <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
@@ -279,20 +255,43 @@
 
                 <div class="exercise-card">
                     <div class="exercise-header">
-                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-4"></div>
+                        <div class="checkbox-container"><input type="checkbox" id="ex2"></div>
                         <div class="exercise-info">
-                            <h3 class="exercise-title">4. Tríceps Pulley (Corda)</h3>
-                            <p class="exercise-desc">Foco na Porção Lateral e Extensão Completa</p>
-                            <span class="exercise-target">Tríceps</span>
+                            <h3 class="exercise-title">2. Rosca Scott com Barra W</h3>
+                            <p class="exercise-desc">Cabeça Curta - Foco em Largura Interna</p>
+                            <span class="exercise-target">Bícep</span>
                         </div>
                     </div>
                     <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
                 </div>
             </div>
 
-            <!-- DIA 2: PERNAS -->
+            <!-- DIA 2: COSTA -->
             <div id="workout-day-2" class="workout-section">
-                <h2 class="section-subtitle">Foco: Membros Inferiores</h2>
-                
+                <h2 class="section-subtitle">Foco: Costas e Lombar</h2>
                 <div class="exercise-card">
                     <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex3"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">1. Puxada Aberta no Pulley</h3>
+                            <p class="exercise-desc">Foco na largura das costas</p>
+                            <span class="exercise-target">Costas</span>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
+                </div>
+            </div>
+
+            <!-- DIA 3: PEITO -->
+            <div id="workout-day-3" class="workout-section">
+                <h2 class="section-subtitle">Foco: Peitoral e Ombros</h2>
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex4"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">1. Supino Reto com Halteres</h3>
+                            <p class="exercise-desc">Estabilização e força geral</p>
+                            <span class="exercise-target">Peito</span>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
