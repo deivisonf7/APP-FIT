@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Meu Guia de Treinos</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1c1c1e;
+            --accent-color: #0A84FF;
+            --text-color: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --success: #30D158;
+            --separator: #2C2C2E;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 110px;
+        }
+
+        header {
+            background-color: rgba(28, 28, 30, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            border-bottom: 0.5px solid var(--separator);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Abas Superiores */
+        .days-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-btn {
+            background-color: var(--card-bg);
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px 5px;
+            font-size: 13px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .day-btn.active {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .workout-section {
+            display: none;
+        }
+
+        .workout-section.active {
+            display: block;
+        }
+
+        .section-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        /* Cartões Modernos de Exercício */
+        .exercise-card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            border: 0.5px solid #2c2c2e;
+        }
+
+        .exercise-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--success);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .exercise-info {
+            flex: 1;
+        }
+
+        .exercise-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0 0 6px 0;
+            letter-spacing: -0.4px;
+        }
+
+        .exercise-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+        }
+
+        .exercise-target {
+            font-size: 11px;
+            background-color: rgba(10, 132, 255, 0.15);
+            color: var(--accent-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .btn-view {
+            margin-top: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--accent-color);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-view:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Menu Inferior */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 75px;
+            background-color: rgba(28, 28, 30, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid var(--separator);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 15px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .nav-item.active {
+            color: var(--accent-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+    <header id="app-title">Rotina de Treinos</header>
+
+    <div class="container">
+        <!-- PÁGINA 1: CRONOGRAMA DE TREINOS -->
+        <div id="page-treinos" class="page active">
+            <div class="days-tabs">
+                <button class="day-btn active" onclick="switchDay(1)">DIA 1</button>
+                <button class="day-btn" onclick="switchDay(2)">DIA 2</button>
+                <button class="day-btn" onclick="switchDay(3)">DIA 3</button>
+                <button class="day-btn" onclick="switchDay(4)">DIA 4</button>
+            </div>
+
+            <!-- DIA 1: BRAÇOS -->
+            <div id="workout-day-1" class="workout-section active">
+                <h2 class="section-subtitle">Foco: Braços (Bíceps e Tríceps)</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-1"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">1. Rosca Direta com Barra Reta</h3>
+                            <p class="exercise-desc">Cabeça Longa - Foco em Pico</p>
+                            <span class="exercise-target">Bíceps</span>
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+direta+barra+reta" target="_blank" class="btn-view">Visualizar Execução</a>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-2"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">2. Rosca Scott com Barra W</h3>
+                            <p class="exercise-desc">Cabeça Curta - Foco em Largura Interna</p>
+                            <span class="exercise-target">Bíceps</span>
+                        </div>
+                    </div>
+                    <a href="https://www.youtube.com/results?search_query=execucao+rosca+scott+barra+w" target="_blank" class="btn-view">Visualizar Execução</a>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-3"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">3. Tríceps Testa com Barra W</h3>
+                            <p class="exercise-desc">Cabeça Longa do Tríceps</p>
+                            <span class="exercise-target">Tríceps</span>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
+                </div>
+
+                <div class="exercise-card">
+                    <div class="exercise-header">
+                        <div class="checkbox-container"><input type="checkbox" id="ex-d1-4"></div>
+                        <div class="exercise-info">
+                            <h3 class="exercise-title">4. Tríceps Pulley (Corda)</h3>
+                            <p class="exercise-desc">Foco na Porção Lateral e Extensão Completa</p>
+                            <span class="exercise-target">Tríceps</span>
+                        </div>
+                    </div>
+                    <a href="https://youtube.com" target="_blank" class="btn-view">Visualizar Execução</a>
+                </div>
+            </div>
+
+            <!-- DIA 2: PERNAS -->
+            <div id="workout-day-2" class="workout-section">
+                <h2 class="section-subtitle">Foco: Membros Inferiores</h2>
+                
+                <div class="exercise-card">
+                    <div class="exercise-header">
