@@ -3,198 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Treinos Pro</title>
+    <title>Fit Tracker</title>
     <style>
         :root {
-            --bg: #09090b;
-            --card: #18181b;
-            --accent: #2563eb;
-            --accent-dim: rgba(37, 99, 235, 0.15);
-            --text: #fafafa;
-            --text-muted: #a1a1aa;
-            --success: #16a34a;
-            --border: #27272a;
+            --bg-main: #000000;
+            --bg-card: #121214;
+            --bg-input: #1a1a1e;
+            --color-primary: #0a84ff;
+            --color-success: #30d158;
+            --text-main: #ffffff;
+            --text-dark: #8e8e93;
+            --border-line: #222224;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            padding-bottom: 100px;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding-bottom: 90px;
         }
 
-        header {
-            background-color: rgba(24, 24, 27, 0.8);
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            padding: 18px; text-align: center; font-size: 18px; font-weight: 700;
-            border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+        /* Topo Fixo */
+        .app-header {
+            background-color: rgba(18, 18, 20, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .container { padding: 16px; }
-        .page { display: none; }
-        .page.active { display: block; }
-
-        /* Abas Superiores Modulares */
-        .tabs-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
-        .tab-trigger {
-            background-color: var(--card); border: 1px solid var(--border); color: var(--text-muted);
-            padding: 12px 4px; font-size: 13px; border-radius: 8px; font-weight: 600; text-align: center; cursor: pointer;
-        }
-        .tab-trigger.active { background-color: var(--accent); color: var(--text); border-color: var(--accent); }
-
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-        .section-title { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Cartões de Exercício */
-        .card { background-color: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-        .card-row { display: flex; gap: 12px; align-items: flex-start; }
-        .check-wrapper input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--success); cursor: pointer; }
-        .card-body { flex: 1; }
-        .card-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-        .card-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
-        .badge { font-size: 11px; background-color: var(--accent-dim); color: #60a5fa; padding: 2px 8px; border-radius: 4px; display: inline-block; font-weight: 600; }
-        
-        /* Sistema de Cargas */
-        .inputs-row { display: flex; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .data-input { background: #27272a; border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 8px; width: 50%; font-size: 13px; }
-
-        .link-btn {
-            margin-top: 12px; background-color: rgba(255, 255, 255, 0.03); color: #3b82f6;
-            border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 13px; font-weight: 600;
-            text-align: center; text-decoration: none; display: block;
+        .app-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        /* Menu de Navegação Fixo */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; right: 0; height: 68px;
-            background-color: rgba(24, 24, 27, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid var(--border); display: flex; z-index: 100;
+        .main-container {
+            padding: 16px;
         }
-        .nav-btn {
-            background: none; border: none; color: var(--text-muted); font-size: 11px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex: 1; cursor: pointer;
+
+        /* Seções de Páginas */
+        .app-page {
+            display: none;
         }
-        .nav-btn.active { color: #3b82f6; }
-        .nav-icon { font-size: 20px; }
+
+        .app-page.active {
+            display: block;
+        }
+
+        /* Menu de Dias (Abas de Cima) */
+        .days-navigation {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-tab-button {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            color: var(--text-dark);
+            padding: 12px 0;
+            font-size: 13px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-tab-button.active {
+            background-color: var(--color-primary);
+            color: var(--text-main);
+            border-color: var(--color-primary);
+        }
+
+        /* Treinos Ocultos por Padrão */
+        .workout-content-block {
+            display: none;
+        }
+
+        .workout-content-block.active {
+            display: block;
+        }
+
+        .focus-badge-title {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        /* Cartões Novos de Exercício */
+        .exercise-item-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-line);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .exercise-main-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .custom-checkbox-input {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--color-success);
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .exercise-details {
+            flex: 1;
+        }
+
+        .exercise-name-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .exercise-meta-info {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .muscle-tag {
+            font-size: 11px;
+            background-color: rgba(10, 132, 255, 0.12);
+            color: #64b5f6;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        /* Painel de Pesos */
+        .weight-fields-grid {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-line);
+        }
+
+        .weight-text-field {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-line);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 8px 12px;
+            width: 50%;
+            font-size: 13px;
+        }
+
+        .video-guide-button {
+            margin-top: 12px;
+            background-color: rgba(255, 255, 255, 0.02);
+            color: var(--color-primary);
+            border: 1px solid var(--border-line);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Menu de Navegação de Baixo */
+        .bottom-navigation-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background-color: rgba(18, 18, 20, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-line);
+            display: flex;
+            z-index: 1000;
+        }
+
+        .nav-tab-item {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .nav-tab-item.active {
+            color: var(--color-primary);
+        }
+
+        .nav-tab-icon {
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <header id="main-header">Ficha de Treinos</header>
+    <header class="app-header">
+        <h1 id="dynamic-app-title">Meus Treinos</h1>
+    </header>
 
-    <div class="container">
-        <!-- PÁGINA: LISTA DE TREINOS -->
-        <div id="view-treinos" class="page active">
-            <!-- Abas Superiores -->
-            <div class="tabs-container">
-                <button class="tab-trigger active" data-target="day-1">DIA 1</button>
-                <button class="tab-trigger" data-target="day-2">DIA 2</button>
-                <button class="tab-trigger" data-target="day-3">DIA 3</button>
-                <button class="tab-trigger" data-target="day-4">DIA 4</button>
+    <div class="main-container">
+        
+        <!-- PÁGINA PRINCIPAL: LISTA DE TREINOS -->
+        <div id="page-content-workouts" class="app-page active">
+            
+            <!-- Abas Superiores de Alternância -->
+            <div class="days-navigation">
+                <button class="day-tab-button active" data-day="1">DIA 1</button>
+                <button class="day-tab-button" data-day="2">DIA 2</button>
+                <button class="day-tab-button" data-day="3">DIA 3</button>
+                <button class="day-tab-button" data-day="4">DIA 4</button>
             </div>
 
-            <!-- TREINO 1 -->
-            <div id="day-1" class="content-section active">
-                <h2 class="section-title">Foco: Bíceps e Tríceps</h2>
-                <div class="card">
-                    <div class="card-row">
-                        <div class="check-wrapper"><input type="checkbox" data-id="chk-d1-1"></div>
-                        <div class="card-body">
-                            <h3 class="card-title">Rosca Direta Barra Reta</h3>
-                            <p class="card-subtitle">3 Séries x 12 Repetições</p>
-                            <span class="badge">Bíceps</span>
+            <!-- CONTEÚDO: DIA 1 -->
+            <div id="workout-block-day-1" class="workout-content-block active">
+                <h2 class="focus-badge-title">Foco: Bíceps e Tríceps</h2>
+                
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d1-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">Rosca Direta Barra Reta</h3>
+                            <p class="exercise-meta-info">3 Séries x 12 Repetições</p>
+                            <span class="muscle-tag">Bíceps</span>
                         </div>
                     </div>
-                    <div class="inputs-row">
-                        <input type="text" class="data-input" data-id="w-d1-1" placeholder="Carga (kg)">
-                        <input type="text" class="data-input" data-id="o-d1-1" placeholder="Anotações">
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d1-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d1-e1" placeholder="Anotações">
                     </div>
-                    <a href="https://youtube.com" target="_blank" class="link-btn">Ver Execução</a>
+                    <a href="https://youtube.com" target="_blank" class="video-guide-button">Ver Execução</a>
                 </div>
             </div>
 
-            <!-- TREINO 2 -->
-            <div id="day-2" class="content-section">
-                <h2 class="section-title">Foco: Costas e Dorsais</h2>
-                <div class="card">
-                    <div class="card-row">
-                        <div class="check-wrapper"><input type="checkbox" data-id="chk-d2-1"></div>
-                        <div class="card-body">
-                            <h3 class="card-title">Puxada Alta Pulley</h3>
-                            <p class="card-subtitle">4 Séries x 12 Repetições</p>
-                            <span class="badge">Costas</span>
+            <!-- CONTEÚDO: DIA 2 -->
+            <div id="workout-block-day-2" class="workout-content-block">
+                <h2 class="focus-badge-title">Foco: Costas e Dorsais</h2>
+                
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d2-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">Puxada Alta Pulley</h3>
+                            <p class="exercise-meta-info">4 Séries x 12 Repetições</p>
+                            <span class="muscle-tag">Costas</span>
                         </div>
                     </div>
-                    <div class="inputs-row">
-                        <input type="text" class="data-input" data-id="w-d2-1" placeholder="Carga (kg)">
-                        <input type="text" class="data-input" data-id="o-d2-1" placeholder="Anotações">
+                    <div class="weight-fields-grid">
+                        <input type="text" class="weight-text-field" data-storage-id="w-d2-e1" placeholder="Carga (kg)">
+                        <input type="text" class="weight-text-field" data-storage-id="o-d2-e1" placeholder="Anotações">
                     </div>
                 </div>
             </div>
 
-            <!-- TREINO 3 -->
-            <div id="day-3" class="content-section">
-                <h2 class="section-title">Foco: Peitoral e Ombros</h2>
-                <div class="card">
-                    <div class="card-row">
-                        <div class="check-wrapper"><input type="checkbox" data-id="chk-d3-1"></div>
-                        <div class="card-body">
-                            <h3 class="card-title">Supino Reto com Halteres</h3>
-                            <p class="card-subtitle">4 Séries x 10 Repetições</p>
-                            <span class="badge">Peito</span>
+            <!-- CONTEÚDO: DIA 3 -->
+            <div id="workout-block-day-3" class="workout-content-block">
+                <h2 class="focus-badge-title">Foco: Peitoral e Ombros</h2>
+                
+                <div class="exercise-item-card">
+                    <div class="exercise-main-row">
+                        <div><input type="checkbox" class="custom-checkbox-input" data-storage-id="chk-d3-e1"></div>
+                        <div class="exercise-details">
+                            <h3 class="exercise-name-title">Supino Reto com Halteres</h3>
+                            <p class="exercise-meta-info">4 Séries x 10 Repetições</p>
+                            <span class="muscle-tag">Peito</span>
                         </div>
-                    </div>
-                    <div class="inputs-row">
-                        <input type="text" class="data-input" data-id="w-d3-1" placeholder="Carga (kg)">
-                        <input type="text" class="data-input" data-id="o-d3-1" placeholder="Anotações">
-                    </div>
-                </div>
-            </div>
-
-            <!-- TREINO 4 -->
-            <div id="day-4" class="content-section">
-                <h2 class="section-title">Foco: Membros Inferiores</h2>
-                <div class="card">
-                    <div class="card-row">
-                        <div class="check-wrapper"><input type="checkbox" data-id="chk-d4-1"></div>
-                        <div class="card-body">
-                            <h3 class="card-title">Agachamento Livre</h3>
-                            <p class="card-subtitle">4 Séries x 10 Repetições</p>
-                            <span class="badge">Pernas</span>
-                        </div>
-                    </div>
-                    <div class="inputs-row">
-                        <input type="text" class="data-input" data-id="w-d4-1" placeholder="Carga (kg)">
-                        <input type="text" class="data-input" data-id="o-d4-1" placeholder="Anotações">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PÁGINA: CARDIO -->
-        <div id="view-cardio" class="page">
-            <h2 class="section-title">Resistência Aeróbica</h2>
-            <div class="card">
-                <div class="card-row">
-                    <div class="check-wrapper"><input type="checkbox" data-id="chk-cardio-1"></div>
-                    <div class="card-body">
-                        <h3 class="card-title">Esteira Pós-Treino</h3>
-                        <p class="card-subtitle">25 Minutos de caminhada acelerada ou corrida</p>
-                        <span class="badge" style="background-color: rgba(239, 68, 68, 0.15); color: #f87171;">Cardio</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navegação Inferior -->
-    <nav class="nav-bar">
-        <button class="nav-btn active" data-page="view-treinos" data-title="Ficha de Treinos">
-            <span class="nav-icon">🏋️‍♂️</span>
-            <span>Treinos</span>
-        </button>
-        <button class="nav-btn" data-page="view-cardio" data-title="Exercícios de Cardio">
-            <span class="nav-icon">🏃‍♂️</span>
